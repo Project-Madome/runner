@@ -1,24 +1,26 @@
 FROM myoung34/github-runner:latest
 
+SHELL [ "/bin/bash", "-c" ]
+
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 RUN curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
 RUN echo "$(<kubectl.sha256) kubectl" | sha256sum --check
 RUN sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 # RUN kubectl version --client
 
-ENV DIR = /var/run/secrets/kubernetes.io/serviceaccount
+ENV SERVICE_ACCOUNT = /var/run/secrets/kubernetes.io/serviceaccount
 
-RUN kubectl config set-cluster loaded-cluster \
+RUN kubectl config set-cluster cluster \
     --server=https://kubernetes.default.svc \
     --embed-certs \
-    --certificate-authority=${DIR}/ca.crt
+    --certificate-authority=${SERVICE_ACCOUNT}/ca.crt
 
-RUN kubectl config set-credentials loaded-user \
-    --token=$(cat ${DIR}/token)
+RUN kubectl config set-credentials user \
+    --token=$(cat ${SERVICE_ACCOUNT}/token)
 
 RUN kubectl config set-context \
     loaded-context \
-    --cluster=loaded-cluster \
-    --user=loaded-user
+    --cluster=cluster \
+    --user=user
 
 RUN kubectl config use-context loaded-context
