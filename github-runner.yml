@@ -45,6 +45,8 @@ spec:
                         value: madome-runner
                       - name: RUNNER_WORKDIR
                         value: /runner
+                      - name: LABELS
+                        value: madome-beta,beta
                   volumeMounts:
                       - name: dockersock
                         mountPath: /var/run/docker.sock
