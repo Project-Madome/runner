@@ -50,4 +50,4 @@ spec:
                       - name: dockersock
                         mountPath: /var/run/docker.sock
                       - name: workdir
-                        mountPath: /runner
+                        mountPath: "./runner"
