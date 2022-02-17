@@ -10,6 +10,6 @@ kubectl config set-credentials user \
 
 kubectl config set-context loaded-context \
     --cluster=cluster \
-    --user=madome-runner
+    --user=user
 
 kubectl config use-context loaded-context
