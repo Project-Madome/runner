@@ -30,12 +30,12 @@ spec:
                       - name: ACCESS_TOKEN
                         valueFrom:
                             configMapKeyRef:
-                                name: github-runner-config
+                                name: madome-runner-secret
                                 key: access_token
                       - name: RUNNER_NAME
                         valueFrom:
                             configMapKeyRef:
-                                name: github-runner-config
+                                name: madome-runner-secret
                                 key: runner_name
                       - name: RUNNER_SCOPE
                         value: "org"
@@ -48,7 +48,7 @@ spec:
                       - name: LABELS
                         valueFrom:
                             configMapKeyRef:
-                                name: github-runner-config
+                                name: madome-runner-secret
                                 key: labels
                   volumeMounts:
                       - name: dockersock
