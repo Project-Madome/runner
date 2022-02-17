@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: madome-runner
+    namespace: runners
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: madome-runner
+    template:
+        metadata:
+            labels:
+                app: madome-runner
+        spec:
+            volumes:
+                - name: dockersock
+                  hostPath:
+                      path: /var/run/docker.sock
+                - name: workdir
+                  hostPath:
+                      path: /runner
+            containers:
+                - name: runner
+                  image: myoung34/github-runner:latest
+                  resources:
+                      limits:
+                          memory: "256Mi"
+                          cpu: "250m"
+                  env:
+                      - name: ACCESS_TOKEN
+                        valueFrom:
+                            configMapKeyRef:
+                                name: github-runner-config
+                                key: access_token
+                      - name: RUNNER_NAME
+                        valueFrom:
+                            configMapKeyRef:
+                                name: github-runner-config
+                                key: runner_name
+                      - name: RUNNER_SCOPE
+                        value: "org"
+                      - name: ORG_NAME
+                        value: "Project-Madome"
+                      - name: RUNNER_NAME_PREFIX
+                        value: madome-runner
+                      - name: RUNNER_WORKDIR
+                        value: /runner
+                  volumeMounts:
+                      - name: dockersock
+                        mountPath: /var/run/docker.sock
+                      - name: workdir
+                        mountPath: /runner
