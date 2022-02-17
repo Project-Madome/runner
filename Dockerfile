@@ -8,6 +8,17 @@ RUN sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 ENV DIR = /var/run/secrets/kubernetes.io/serviceaccount
 
-RUN kubectl config set-cluster cluster --server=https://kubernetes.default.svc
-RUN kubectl config set-cluster cluster --embed-certs --certificate-authority=${DIR}/ca.crt
-RUN kubectl config set-credentials user --token=$(cat ${DIR}/token)
+RUN kubectl config set-cluster cluster \
+    --server=https://kubernetes.default.svc \
+    --embed-certs \
+    --certificate-authority=${DIR}/ca.crt
+
+RUN kubectl config set-credentials user \
+    --token=$(cat ${DIR}/token)
+
+RUN kubectl config set-context \
+    loaded-context \
+    --cluster=cluster \
+    --user=user
+
+RUN kubectl config use-context loaded-context
