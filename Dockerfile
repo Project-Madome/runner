@@ -7,3 +7,5 @@ RUN curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.tx
 RUN echo "$(<kubectl.sha256) kubectl" | sha256sum --check
 RUN sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 RUN kubectl version --client
+
+COPY ./setup-kube.sh /setup-kube.sh
