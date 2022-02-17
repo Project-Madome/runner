@@ -22,7 +22,6 @@ spec:
             containers:
                 - name: runner
                   image: madome-runner:latest
-                  imagePullPolicy: Never
                   resources:
                       limits:
                           memory: "256Mi"
