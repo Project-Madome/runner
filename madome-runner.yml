@@ -50,8 +50,18 @@ spec:
                             configMapKeyRef:
                                 name: madome-runner-secret
                                 key: labels
+                  command:
+                      - /bin/bash
+                      - c
+                      - |
+                          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" &&
+                          curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256" &&
+                          echo "$(<kubectl.sha256) kubectl" | sha256sum --check &&
+                          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl &&
+                          kubectl version --client
+
                   volumeMounts:
                       - name: dockersock
                         mountPath: /var/run/docker.sock
                       - name: workdir
-                        mountPath: "/runner"
+                        mountPath: /runner
