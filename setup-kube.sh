@@ -5,7 +5,7 @@ kubectl config set-cluster cluster \
     --embed-certs \
     --certificate-authority=$SERVICE_ACCOUNT/ca.crt
 
-kubectl config set-credentials madome-runner \
+kubectl config set-credentials user \
     --token=$(cat $SERVICE_ACCOUNT/token)
 
 kubectl config set-context loaded-context \
